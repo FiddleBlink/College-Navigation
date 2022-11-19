@@ -1,0 +1,145 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #508bfc;
+}
+
+#map {
+  position: absolute;
+  top: 3.5rem;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#instructions {
+  position: absolute;
+  margin-top: 100px;
+  width: 25%;
+  top: 0;
+  bottom: 20%;
+  padding: 20px;
+  background-color: #fff;
+  overflow-y: scroll;
+  font-family: sans-serif;
+}
+
+
+
+
+
+.btn{
+  border-radius: 0.8rem !important;
+  height:3em !important;
+  font-family: 'Rubik', sans-serif !important;
+}
+
+h3{
+  color: #508bfc;
+  font-family: 'Rubik', sans-serif;
+  font-weight: bold !important;
+}
+
+::placeholder{
+  font-family: 'Rubik', sans-serif;
+  color: white;
+}
+
+input.form-control{
+  background-color: #E2EEFF;
+  border: none;
+  border-radius: 0.8rem;
+  transition: 0.5s;
+  height: 3em;
+}
+
+.form-control.is-invalid, .was-validated .form-control:invalid{
+  margin-bottom: 0rem;
+}
+.form-control.is-valid, .was-validated .form-control:valid{
+  margin-bottom: 0rem;
+}
+
+input.form-control:focus{
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  background-color: white;
+  border: none;
+  border-radius: 0.8rem;
+}
+
+.form-control::placeholder{
+  font-family: 'Rubik', sans-serif;
+  color: #A2B9DA;
+}
+
+.fa-solid{
+  color:#A2B9DA;
+}
+
+@media (max-width:992px){
+  h3{
+      font-size: 3.5em;
+  }
+  ::placeholder{
+      font-size: 1.5em;
+  }
+  button{
+      height: 4em;
+  }
+  input.form-control{
+      height: 4em;
+  }
+  div.noAcc{
+      font-size:1.5em;
+  }
+  a{
+      font-size: 1.5rem;
+  }
+  .fa-solid{
+      font-size: 2em;
+  }
+  input.form-control{
+    height: 4em;
+  }
+  .mb-4{
+      margin-bottom: 3em !important;
+  }
+  .btn{
+      height:4em;
+  }
+}
+
+@media (min-width:992px){
+  .registerpage{
+    font-size: 3rem !important;
+  }
+  .h3, h3{
+      font-size: 2.5rem !important;
+  }
+}
+
+select{
+  background-color: white;
+  padding: 0rem 0.5rem;
+  border-radius: 0.8rem;
+  transition: 0.5s;
+  height: 3em;
+}
+
+textarea{
+  background-color: white !important;
+  padding: 0rem 0.5rem;
+  border-radius: 0.8rem !important;
+  transition: 0.5s;
+}
+
+textarea:hover{
+  border: 3px solid #508bfc;
+  border-radius: 0.8rem;
+}
+
+select:hover{
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  border: 3px solid #508bfc;
+  border-radius: 0.8rem;
+}
