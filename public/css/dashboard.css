@@ -1,0 +1,14 @@
+.card{
+    height: 95%;
+}
+
+h3{
+    color: #508bfc;
+    font-family: 'Rubik', sans-serif;
+    font-weight: bold !important;
+    font-size: 1.5rem !important;
+  }
+
+#mychart{
+    height: 100%;
+}

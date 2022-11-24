@@ -61,7 +61,7 @@ app.post('/login',async(req,res)=>{
   if(data['data'][0].password == req.body.password)
   {
     await userHandler.insertLoggedInUser(user);
-    req.session.user_id =  data['data'][0].user_id;
+    req.session.login_id =  user.login_id;
     res.redirect('/map')
   }else{
     res.redirect('/login');
@@ -70,10 +70,11 @@ app.post('/login',async(req,res)=>{
 
 
 app.get('/logout',async(req,res)=>{
-  const message = await userHandler.removeLoggedInUser(req.session.user_id);
+  const message = await userHandler.removeLoggedInUser(req.session.login_id);
   req.session.user_id = null;
   res.redirect('/login')
 })
+
 app.get("/map", (req, res) => {
   // if(!req.session.user_id)
   // {
@@ -97,15 +98,37 @@ app.post('/route',async (req,res)=>{
   }
   const data = {
     "source" :source,
-    "destination":destination
+    "destination":destination,
   }
   let index = Math.floor(Math.random() * 100);
 
-  //  await userHandler.createtravel({travel_id:index,source:req.body.source,destination:req.body.destination,user_id:req.session.user_id});
-  //  res.json(data);
+  
+  
+  const userdata = await userHandler.getLoggedUser(req.session.login_id);
+  const sourceid = await userHandler.getlocationid(req.body.source);
+  const destinationid = await userHandler.getlocationid(req.body.destination);
+  await userHandler.createtravel({travel_id:index,source:sourceid['data'][0].loc_id,destination:destinationid['data'][0].loc_id,purpose:req.body.purpose,user_id:userdata['data'][0].userid});
+  
+  
+  
+  // res.json(data);
   res.render('home',{data})
-//  res.json({source,destination});
+  //  res.json({source,destination});
 })
+
+
+app.get('/dashboard', (req, res)=>{
+  res.render('dashboard');
+})
+
+
+
+
+
+
+
+
+
 /* Error handler middleware */
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -113,8 +136,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ message: err.message });
   return;
 });
-
-
 
 app.listen(3000, () => {
   console.log("Listening to port 3000");

@@ -4,30 +4,6 @@ body {
   background-color: #508bfc;
 }
 
-#map {
-  position: absolute;
-  top: 3.5rem;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-}
-
-#instructions {
-  position: absolute;
-  margin-top: 100px;
-  width: 25%;
-  top: 0;
-  bottom: 20%;
-  padding: 20px;
-  background-color: #fff;
-  overflow-y: scroll;
-  font-family: sans-serif;
-}
-
-
-
-
-
 .btn{
   border-radius: 0.8rem !important;
   height:3em !important;

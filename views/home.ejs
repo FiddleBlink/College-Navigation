@@ -1,6 +1,17 @@
 <% layout('./layout/boilerplate') %> 
+<link rel="stylesheet" href="/css/map.css">
+
 <div id="map"></div>
-<div id="instructions"></div>
+<div class="container"> 
+    <div class="row">
+        <div id="instructions"></div>
+        <div id="buttons" class="d-flex justify-content-center align-items-center">
+            <button class="btn btn-primary flex-grow-1 mx-1" value="completed">complete Trip</button>
+            <button class="btn btn-danger flex-grow-1 mx-1" value="cancelled">Cancel Trip</button>
+        </div>
+    </div>
+</div>
+
 <script>
 const loc = { features: JSON.parse(`<%-JSON.stringify(data)%>`) };
 </script>
