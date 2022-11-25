@@ -13,6 +13,7 @@ async function getUser(user){
     data
   }
 }
+
 async function createUser(user)
 { 
   const result = await db.query(
@@ -107,7 +108,88 @@ async function createtravel(user)
   return {message};
 }
 
+async function travelcompleted(id)
+{
+  const result = await db.query(
+    `UPDATE TRAVEL
+    SET IS_COMP=1 WHERE travel_id=${id}`
+    )
+    return true;
+}
 
+async function travelincompleted(id)
+{
+  const result = await db.query(
+    `UPDATE TRAVEL
+    SET IS_COMP=0 WHERE travel_id=${id}`
+    )
+    return true;
+}
+
+
+async function gettravelid(userid){
+  const rows = await db.query(
+    `SELECT travel_id 
+    FROM travel WHERE T_Userid='${userid}'`
+  );
+  const data = helper.emptyOrRows(rows);
+  return {
+    data
+  }
+}
+
+async function getUsers(){
+  const rows = await db.query(
+    `SELECT * 
+    FROM users;`
+  );
+  const data = helper.emptyOrRows(rows);
+  return {
+    data
+  }
+}
+
+async function getloginlogs(){
+  const rows = await db.query(
+    `select User_id,login_date,status,fname,lname,email 
+    from login_logs inner join users on userid=User_id order by login_date desc;`
+  );
+  const data = helper.emptyOrRows(rows);
+  return {
+    data
+  }
+}
+
+async function getactiveUsers(){
+  const rows = await db.query(
+    `select Login_id,fname,lname,email from active inner join users on userid = User_id;`
+  );
+  const data = helper.emptyOrRows(rows);
+  return {
+    data
+  }
+}
+
+async function gettravellogs(){
+  const rows = await db.query(
+    `select travelid,fname,lname,Travel_date,status,purpose,st.Loc_name as source,fin.Loc_name 
+    as destination from travel_logs inner join travel on travelid = travel_id inner join users on User_id=T_Userid join location st on source=st.Loc_id join location fin on desti=fin.Loc_id order by travel_date desc;`
+  );
+  const data = helper.emptyOrRows(rows);
+  return {
+    data
+  }
+}
+
+async function getfrequency(){
+  const rows = await db.query(
+    `select Loc_Name, count(Travel_id) as count from travel inner join location on desti=loc_id group by Loc_Name order by count desc limit 4;`
+  );
+  const data = helper.emptyOrRows(rows);
+  return {
+    data
+  }
+}
 
 module.exports = {
   createUser,
@@ -116,5 +198,13 @@ module.exports = {
   removeLoggedInUser,
   getLoggedUser,
   createtravel,
-  getlocationid
+  getlocationid,
+  gettravelid,
+  travelcompleted,
+  getUsers,
+  getloginlogs,
+  getactiveUsers,
+  gettravellogs,
+  getfrequency,
+  travelincompleted
 }

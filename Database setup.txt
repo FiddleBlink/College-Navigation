@@ -1,0 +1,134 @@
+mysql> create database miniproject;
+mysql> use miniproject;
+
+mysql> create table Users(User_id int primary key, fname varchar(20) not null, lname varchar(20) not null, phone char(8) not null, email varchar(50) not null, password varchar(20) not null);
+mysql> desc Users;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| User_id  | int         | NO   | PRI | NULL    |       |
+| fname    | varchar(20) | NO   |     | NULL    |       |
+| lname    | varchar(20) | NO   |     | NULL    |       |
+| phone    | char(8)     | NO   |     | NULL    |       |
+| email    | varchar(50) | NO   |     | NULL    |       |
+| password | varchar(20) | NO   |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+
+mysql> create table Active(Login_id int primary key, userid int not null, foreign key(userid) references Users(User_id));
+mysql> desc Active;
++----------+------+------+-----+---------+-------+
+| Field    | Type | Null | Key | Default | Extra |
++----------+------+------+-----+---------+-------+
+| Login_id | int  | NO   | PRI | NULL    |       |
+| userid   | int  | NO   | MUL | NULL    |       |
++----------+------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+
+mysql> create table Login_logs(Login_date date not null default "00-00-00", status varchar(20) not null, userid int not null, foreign key(userid) references Users(User_id));
+mysql> alter table login_logs
+    -> modify Login_date datetime not null default now();
+mysql> desc login_logs;
++------------+-------------+------+-----+-------------------+-------------------+
+| Field      | Type        | Null | Key | Default           | Extra             |
++------------+-------------+------+-----+-------------------+-------------------+
+| Login_date | datetime    | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| status     | varchar(20) | NO   |     | NULL              |                   |
+| userid     | int         | NO   | MUL | NULL              |                   |
++------------+-------------+------+-----+-------------------+-------------------+
+3 rows in set (0.01 sec)
+
+mysql> create table Location(Loc_id int primary key, Loc_Name varchar(20) not null, Loc_lat float not null, loc_long float not null);
+mysql> desc Location;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| Loc_id   | int          | NO   | PRI | NULL    |       |
+| Loc_Name | varchar(20)  | NO   |     | NULL    |       |
+| Loc_lat  | float        | NO   |     | NULL    |       |
+| loc_long | float        | NO   |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+
+mysql> create table Travel(Travel_id int primary key, source int not null, desti int not null, T_Userid int not null, purpose varchar(500) not null, foreign key(T_Userid) references Users(User_id), foreign key(source) references Location(Loc_id), foreign key(desti) references Location(Loc_id));
+Query OK, 0 rows affected (0.31 sec)
+mysql> alter table travel modify is_comp bool default null;
+mysql> desc travel;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| Travel_id | int          | NO   | PRI | NULL    |       |
+| source    | int          | NO   | MUL | NULL    |       |
+| desti     | int          | NO   | MUL | NULL    |       |
+| T_Userid  | int          | NO   | MUL | NULL    |       |
+| purpose   | varchar(500) | NO   |     | NULL    |       |
+| is_comp   | tinyint(1)   | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+
+
+0mysql> create table Travel_logs(Travel_date datetime not null default now(), Travelid int not null, status varchar(20) not null, foreign key(Travelid) references Travel(Travel_id));
+mysql> desc Travel_logs;
++-------------+-------------+------+-----+-------------------+-------------------+
+| Field       | Type        | Null | Key | Default           | Extra             |
++-------------+-------------+------+-----+-------------------+-------------------+
+| Travel_date | datetime    | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| Travelid    | int         | NO   | MUL | NULL              |                   |
+| status      | varchar(20) | NO   |     | NULL              |                   |
++-------------+-------------+------+-----+-------------------+-------------------+
+3 rows in set (0.02 sec)
+
+
+
+
+Delimiter //
+create trigger loginlog after insert
+On active
+For each row
+Begin
+	Declare id int;
+	Select new.userid into id from active where login_id=new.login_id;
+	Insert into Login_logs values(now(), "logged in", id);
+End//
+Delimiter ;
+
+Delimiter //
+Create trigger logoutlog before delete
+On active
+For each row
+Begin
+	Declare id int;
+	Select old.userid into id from active where login_id=old.login_id;
+	Insert into Login_logs values(now(), "logged out", id);
+End//
+Delimiter ;
+
+Delimiter //
+create trigger travelstartlog after insert
+On travel
+For each row
+Begin
+	Declare id int;
+	Select new.travel_id into id from travel where travel_id=new.travel_id;
+	Insert into travel_logs values(now(), id, "Travel Started");
+End//
+Delimiter ;
+
+Delimiter //
+create trigger travelcheck after update
+On travel
+For each row
+Begin
+	Declare id int;
+	Select new.travel_id into id from travel where travel_id=new.travel_id;
+	if new.is_comp=1 then
+	Insert into travel_logs values(now(), id, "Travel Successful");
+	elseif new.is_comp=0 then
+	Insert into travel_logs values(now(), id, "Travel Unsuccessful");
+	end if;
+End//
+Delimiter ;

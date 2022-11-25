@@ -5,10 +5,16 @@
 <div class="container"> 
     <div class="row">
         <div id="instructions"></div>
-        <div id="buttons" class="d-flex justify-content-center align-items-center">
-            <button class="btn btn-primary flex-grow-1 mx-1" value="completed">complete Trip</button>
-            <button class="btn btn-danger flex-grow-1 mx-1" value="cancelled">Cancel Trip</button>
-        </div>
+        <form action="/accept" method="post">
+            <div id="buttons" class="d-flex justify-content-center align-items-center">
+                <button class="btn btn-primary flex-grow-1 mx-1" id="completed" value="completed" type="submit">complete Trip</button>
+            </div>
+        </form>
+        <form action="/reject" method="post">
+            <div id="buttons" class="d-flex justify-content-center align-items-center">
+                <button class="btn btn-danger flex-grow-1 mx-1" id="cancelled" value="cancelled" type="submit">Cancel Trip</button>
+            </div>
+        </form>
     </div>
 </div>
 
