@@ -83,6 +83,9 @@ mysql> desc Travel_logs;
 3 rows in set (0.02 sec)
 
 
+ alter table Travel_logs add unique key candi(Travel_date, Travelid);
+ alter table login_logs add unique key candidate(Login_date, userid);
+
 
 
 Delimiter //

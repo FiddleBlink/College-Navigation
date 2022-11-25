@@ -14,6 +14,18 @@ async function getUser(user){
   }
 }
 
+async function getUseremail(userid){
+  const rows = await db.query(
+    `SELECT * 
+    FROM users WHERE user_id='${userid}'`
+  );
+  const data = helper.emptyOrRows(rows);
+
+  return {
+    data
+  }
+}
+
 async function createUser(user)
 { 
   const result = await db.query(
@@ -206,5 +218,6 @@ module.exports = {
   getactiveUsers,
   gettravellogs,
   getfrequency,
-  travelincompleted
+  travelincompleted,
+  getUseremail
 }

@@ -12,3 +12,7 @@ h3{
 #mychart{
     height: 100%;
 }
+
+.scroller{
+    overflow: scroll;
+}

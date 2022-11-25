@@ -7,6 +7,8 @@ const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const userHandler = require('./services/user');
 const { render } = require('ejs');
+const { isadmin } = require('./middleware');
+
 
 const locationHandler = require('./services/handler')
 
@@ -134,7 +136,7 @@ app.post('/accept', async (req, res) => {
   const comp = await userHandler.gettravelid(userdata['data'][0].userid);
   await userHandler.travelcompleted(comp['data'][0].travel_id);
   //console.log(comp);
-  res.send("accepted");
+  res.render('index',{status:true});
 })
 
 app.post('/reject', async (req, res) => {
@@ -142,13 +144,13 @@ app.post('/reject', async (req, res) => {
   const comp = await userHandler.gettravelid(userdata['data'][0].userid);
   await userHandler.travelincompleted(comp['data'][0].travel_id);
   //console.log(comp);
-  res.send("accepted");
+  res.render('index');
 })
 
 
 
 
-app.post('/getdashboard', async (req, res)=>{
+app.post('/getdashboard', isadmin, async (req, res)=>{
   // login logs, active user, travel log, all users, frequently visited
   const temp0 = await userHandler.getUsers();
   const alluser = temp0['data'];
